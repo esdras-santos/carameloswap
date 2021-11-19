@@ -69,12 +69,12 @@ class App extends Component {
     const timestamp = Math.floor(Date.now() / 1000) + 600
     const exchange_address = await this.state.factory.methods.getExchange(CT_ADDRESS).call()
     const exchange = new web3.eth.Contract(EXCHANGE, exchange_address)
-    const swaped = await exchange.methods.ethToTokenSwapInput(etherAmount, timestamp).send({value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
+    await exchange.methods.ethToTokenSwapInput(etherAmount, timestamp).send({value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
       this.setState({loading: false})
     })
   }
 
-  liquidity = async (amount) =>{
+  liquidity = async (ethAmount, tokenAmount) =>{
     const web3 = window.web3
     this.setState({loading: true})
     const timestamp = Math.floor(Date.now() / 1000) + 600
@@ -82,16 +82,15 @@ class App extends Component {
     const exchange = new web3.eth.Contract(EXCHANGE, exchange_address)
     const token = new web3.eth.Contract(CT, CT_ADDRESS)
 
-    const min_liquidity = await exchange.methods.totalSupply().call()
-    console.log(min_liquidity)
-    await token.methods.approve(exchange_address, amount).send({from: this.state.account}).on('transactionHash', async (hash) => {
-      await exchange.methods.addLiquidity(min_liquidity.toString() ,amount, timestamp).send({value: amount,from: this.state.account}).on('transactionHash', (hash) => {
+    
+    await token.methods.approve(exchange_address, tokenAmount).send({from: this.state.account}).on('transactionHash', async (hash) => {
+      await exchange.methods.addLiquidity(ethAmount, tokenAmount, timestamp).send({value: ethAmount,from: this.state.account}).on('transactionHash', (hash) => {
         this.setState({loading: false})
       })
     })
   }
 
-  sellTokens = async (tokenAmount) => {
+  sellTokens = async (tokenAmount, ethAmount) => {
     const web3 = window.web3
     this.setState({loading: true})
     const timestamp = Math.floor(Date.now() / 1000) + 600
@@ -99,7 +98,7 @@ class App extends Component {
     const exchange = new web3.eth.Contract(EXCHANGE, exchange_address)
     const token = new web3.eth.Contract(CT, CT_ADDRESS)
     await token.methods.approve(exchange_address, tokenAmount).send({from: this.state.account}).on('transactionHash', async (hash) => {
-        await exchange.methods.tokenToEthSwapInput(tokenAmount, timestamp).send({from: this.state.account}).on('transactionHash', (hash) => {
+        await exchange.methods.tokenToEthSwapInput(tokenAmount, ethAmount, timestamp).send({from: this.state.account}).on('transactionHash', (hash) => {
           this.setState({loading: false})
       })
     })

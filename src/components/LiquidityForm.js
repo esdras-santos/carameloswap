@@ -74,9 +74,10 @@ class LiquidityForm extends Component {
             event.preventDefault()
             let etherAmount
             etherAmount = this.input.value.toString()
+            const tokenAmount = this.amm(Number(etherAmount))
             console.log(this.add(etherAmount,'1'))
             // etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
-            this.props.liquidity(this.add(etherAmount,'1'))
+            this.props.liquidity(etherAmount, tokenAmount)
             
           }}>
           <div>
