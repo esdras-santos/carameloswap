@@ -78,7 +78,7 @@ class BuyForm extends Component {
           </div>
           <div className="mb-5">
             <span className="float-left text-muted">Exchange Rate</span>
-            <span className="float-right text-muted">1 ETH = {this.amm(1000000000000000000).toString()} CaSw</span>
+            <span className="float-right text-muted">1 ETH = {Math.trunc(Number(this.amm(1000000000000000000).toString()))} CaSw</span>
           </div>
           <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
         </form>
