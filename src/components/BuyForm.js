@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import caramelologo from '../caramelologo.png'
 import ethLogo from '../eth-logo.png'
+import BigNumber from 'bignumber.js'
 
 class BuyForm extends Component {
   constructor(props){
@@ -24,7 +25,8 @@ class BuyForm extends Component {
             let etherAmount
             etherAmount = this.input.value.toString()
             // etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
-            this.props.buyTokens(etherAmount)
+            let tokenAmount = Math.trunc(this.amm(etherAmount)).toString()
+            this.props.buyTokens(etherAmount, tokenAmount)
           }}>
           <div>
             <label className="float-left"><b>Input</b></label>

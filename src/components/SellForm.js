@@ -24,7 +24,7 @@ class SellForm extends Component {
             let tokenAmount
             tokenAmount = this.input.value.toString()
             // tokenAmount = window.web3.utils.toWei(tokenAmount, 'Ether')
-            this.props.sellTokens(tokenAmount, this.amm(tokenAmount).toString())
+            this.props.sellTokens(tokenAmount, Math.trunc(this.amm(tokenAmount)).toString())
           }}>
           <div>
             <label className="float-left"><b>Input</b></label>

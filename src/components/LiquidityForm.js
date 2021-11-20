@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import caramelologo from '../caramelologo.png'
 import ethLogo from '../eth-logo.png'
+import {add, mult, div} from './Utils'
 
 class LiquidityForm extends Component {
   constructor(props){
@@ -9,44 +10,8 @@ class LiquidityForm extends Component {
       output: '0'
     }
   }
-  add = (arg1, arg2) => {
-    var sum = "";
-    var r = 0;
-    var a1, a2, i;
-  
-    // Pick the shortest string as first parameter and the longest as second parameter in my algorithm
-    if (arg1.length < arg2.length) {
-      a1 = arg1;
-      a2 = arg2;
-    }
-    else {
-      a1 = arg2;
-      a2 = arg1;
-    }
-    a1 = a1.split("").reverse();
-    a2 = a2.split("").reverse();
-  
-    // Sum a1 and a2 digits
-    for (i = 0; i < a2.length; i++) {
-      var t = ((i < a1.length) ? parseInt(a1[i]) : 0) + parseInt(a2[i]) + r;
-      
-      sum += t % 10;
-  
-      r = t < 10 ? 0 : Math.floor(t / 10);
-    }
-    // Append the last remain
-    if (r > 0)
-      sum += r;
-  
-    sum = sum.split("").reverse();
-    
-    // Trim the leading "0"
-    while (sum[0] == "0")
-      sum.shift();
-  
-    return sum.length > 0 ? sum.join("") : "0";
-  }
-  
+
+
   amm = (amount) => {
     // const invariant = (this.props.ethPool) * this.props.tokenPool
     // let add_reserve = invariant/ this.props.tokenPool
@@ -55,8 +20,8 @@ class LiquidityForm extends Component {
     // if (result == 1000000000000000000){
     //   return 1
     // }
-    const a = amount * this.props.tokenPool / this.props.ethPool
-    let result = this.add(a.toString(), '1')
+    const a = mult(amount, div(this.props.tokenPool, Number(this.props.ethPool)))
+    let result = add(a, '1')
     return result
 
     // let input_reserve = this.props.ethPool - amount
@@ -75,7 +40,7 @@ class LiquidityForm extends Component {
             let etherAmount
             etherAmount = this.input.value.toString()
             const tokenAmount = this.amm(Number(etherAmount))
-            console.log(this.add(etherAmount,'1'))
+            console.log(add(etherAmount,'1'))
             // etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
             this.props.liquidity(etherAmount, tokenAmount)
             
